@@ -27,7 +27,6 @@ exports.initialize = function(pathsObj) {
 
 exports.readListOfUrls = function(callback) {
   fs.readFile(exports.paths.list, 'utf-8', (err, data) => {
-    console.log('data!', data.split('\n'));
     if (err) {
       console.log(err);
     }
@@ -38,9 +37,33 @@ exports.readListOfUrls = function(callback) {
 };
 
 exports.isUrlInList = function(url, callback) {
+  fs.readFile(exports.paths.list, 'utf-8', (err, data) => {
+    var urlArray = data.split('\n');
+    var exists = '';
+    if (err) {
+      console.log(err);
+    }
+    for (var i = 0; i < urlArray.length; i++) {
+      if (urlArray[i] === url) {
+        exists = true;
+        callback(exists);
+      }
+    }
+    callback(exists);
+    // urlArray.indexOf(url) > 0 ? exists = true : exists = false;
+    // callback(exists);
+  });
 };
 
 exports.addUrlToList = function(url, callback) {
+  var string = url + '\n';
+  fs.writeFile(exports.paths.list, string, (err) => {
+    if (err) {
+      callback(err);
+    } else {
+      console.log('successful add!');
+    }
+  });
 };
 
 exports.isUrlArchived = function(url, callback) {
