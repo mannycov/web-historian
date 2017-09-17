@@ -59,14 +59,11 @@ exports.isUrlArchived = function(url, callback) {
 };
 
 exports.downloadUrls = function(urls) {
-  // console.log('urls', urls);
   urls.forEach(url => {
-    console.log('url', url);
-    fs.writeFile(exports.paths.archivedSites, url, function(err) {
+    const path = exports.paths.archivedSites + '/' + url;
+    fs.appendFile(path, url, err => {
       if (err) {
-        console.log(err);
-      } else {
-        console.log('url has been archived!');
+        throw err;
       }
     });
   });
