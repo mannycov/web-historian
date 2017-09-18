@@ -16,14 +16,28 @@ exports.serveAssets = function(res, asset, callback) {
   // css, or anything that doesn't change often.)
   if (asset === '/') {
     asset = path.join(__dirname, '../web/public/index.html');
+    fs.readFile(asset, 'utf-8', (err, data) => {
+      if (err) {
+        console.log('err', err);
+      } else {
+        callback(data);
+      }
+    });
+  } else {
+    var string = asset.substr(5, asset.length - 9);
+    var url = '../archives/sites' + asset;
+    asset = path.join(__dirname, url);
+    fs.writeFile(asset, '/' + string + '/', err => console.log('err', err));
+
+    fs.readFile(asset, 'utf-8', (err, data) => {
+      if (err) {
+        console.log('err:', err);
+      } else {
+        callback(data);
+      }
+    });
+
   }
-  fs.readFile(asset, 'utf-8', (err, data) => {
-    if (err) {
-      console.log('err', err);
-    } else {
-      callback(data);
-    }
-  });
 };
 
 
