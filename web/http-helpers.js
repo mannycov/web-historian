@@ -31,7 +31,7 @@ exports.serveAssets = function(res, asset, callback) {
         asset = path.join(__dirname, url);
         fs.writeFile(asset, '/' + string + '/', err => console.log('err', err));
 
-    fs.readFile(asset, 'utf-8', (err, data) => {
+        fs.readFile(asset, 'utf-8', (err, data) => {
           if (err) {
             console.log('err:', err);
           } else {
