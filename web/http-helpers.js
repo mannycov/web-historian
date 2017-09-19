@@ -24,19 +24,25 @@ exports.serveAssets = function(res, asset, callback) {
       }
     });
   } else {
-    var string = asset.substr(5, asset.length - 9);
-    var url = '../archives/sites' + asset;
-    asset = path.join(__dirname, url);
-    fs.writeFile(asset, '/' + string + '/', err => console.log('err', err));
+    archive.isUrlArchived(asset, boolean => {
+      if (!boolean) {
+        var string = asset.substr(5, asset.length - 9);
+        var url = '../archives/sites' + asset;
+        asset = path.join(__dirname, url);
+        fs.writeFile(asset, '/' + string + '/', err => console.log('err', err));
 
     fs.readFile(asset, 'utf-8', (err, data) => {
-      if (err) {
-        console.log('err:', err);
+          if (err) {
+            console.log('err:', err);
+          } else {
+            // console.log('data', data);
+            callback(data);
+          }
+        });
       } else {
-        callback(data);
+        callback(null);
       }
     });
-
   }
 };
 
