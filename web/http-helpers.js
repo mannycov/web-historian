@@ -23,19 +23,29 @@ exports.serveAssets = function(res, asset, callback) {
         callback(data);
       }
     });
+  } else if (asset === '/styles.css') {
+    asset = path.join(__dirname, '../web/public/styles.css');
+    fs.readFile(asset, 'utf-8', (err, data) => {
+      if (err) {
+        console.log('err', err);
+      } else {
+        callback(data);
+      }
+    });
   } else {
     archive.isUrlArchived(asset, boolean => {
       if (!boolean) {
-        var string = asset.substr(5, asset.length - 9);
-        var url = '../archives/sites' + asset;
+        var string = asset.substr(4);
+        string = string.slice(0, -4);
+        console.log('this is the whole asset', asset);
+        console.log('this is the sliced string', string);
+        var url = '../archives/sites/' + asset;
         asset = path.join(__dirname, url);
         fs.writeFile(asset, '/' + string + '/', err => console.log('err', err));
-
         fs.readFile(asset, 'utf-8', (err, data) => {
           if (err) {
             console.log('err:', err);
           } else {
-            // console.log('data', data);
             callback(data);
           }
         });
